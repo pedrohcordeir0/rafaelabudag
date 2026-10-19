@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Budag Odontologia | Dra. Rafaela Budag</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #eef3f3;
+    --surface: #ffffff;
+    --ink: #10313a;
+    --muted: #4c6a72;
+    --line: #c9d8da;
+    --particle: #2f7d8c;
+    --pick: #2443c7;
+    --pick-soft: #e3e8fb;
+    --warn: #a3321c;
+    --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0b1a20; --surface: #11252c; --ink: #e4f1f3; --muted: #9db8be; --line: #24434c;
+      --particle: #bfe3ea; --pick: #8ea2ff; --pick-soft: #1d2a55; --warn: #ff9a85; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0b1a20; --surface: #11252c; --ink: #e4f1f3; --muted: #9db8be; --line: #24434c;
+    --particle: #bfe3ea; --pick: #8ea2ff; --pick-soft: #1d2a55; --warn: #ff9a85; color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 1.0625rem; line-height: 1.6; overflow-x: hidden; }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; pointer-events: none; }
+  main, header, footer { position: relative; z-index: 1; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--pick); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap { width: min(72rem, 100% - 2.5rem); margin-inline: auto; }
+
+  header .wrap { display: flex; justify-content: space-between; align-items: baseline; padding-block: 1.5rem; gap: 1rem; }
+  .brand { font-family: var(--display); font-weight: 700; font-size: 1.25rem; letter-spacing: -0.01em; text-decoration: none; }
+  .brand small { display: block; font-family: var(--body); font-weight: 400; font-size: .875rem; color: var(--muted); letter-spacing: 0; }
+  header nav a { text-decoration: none; color: var(--muted); font-size: .95rem; margin-left: 1.25rem; }
+  header nav a:hover { color: var(--ink); }
+
+  /* Hero */
+  .hero { min-height: calc(100vh - 6rem); display: grid; align-content: end; padding-bottom: 12vh; }
+  .hero h1 { font-family: var(--display); font-weight: 600; font-size: clamp(2.5rem, 7vw, 5.6rem); line-height: .98; letter-spacing: -0.035em; margin: 0 0 1.5rem; max-width: 13ch; }
+  .hero p { max-width: 36rem; color: var(--muted); font-size: clamp(1.05rem, 1.6vw, 1.25rem); margin: 0 0 2rem; }
+  .btn { display: inline-flex; align-items: center; gap: .5rem; font: 700 1rem var(--body); padding: .9rem 1.4rem; border-radius: 999px; border: 2px solid var(--ink); background: var(--ink); color: var(--paper); text-decoration: none; cursor: pointer; }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .btn:hover { filter: brightness(1.15); }
+  .btn[disabled] { opacity: .5; cursor: not-allowed; }
+
+  /* Como funciona */
+  .steps { padding-block: 18vh 10vh; }
+  .steps h2, .section-title { font-family: var(--display); font-weight: 600; font-size: clamp(1.9rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -0.025em; margin: 0 0 2.5rem; max-width: 20ch; }
+  .steps ol { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 2.5rem; counter-reset: s; }
+  .steps li { counter-increment: s; border-top: 2px solid var(--ink); padding-top: 1rem; }
+  .steps li::before { content: counter(s); font-family: var(--display); font-weight: 700; font-size: 2.25rem; line-height: 1; display: block; margin-bottom: .75rem; }
+  .steps li strong { display: block; font-size: 1.15rem; margin-bottom: .25rem; }
+  .steps li span { color: var(--muted); }
+
+  /* Ficha */
+  .ficha-section { padding-block: 6vh 10vh; }
+  .ficha { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; padding: clamp(1.25rem, 4vw, 3rem); }
+  .ficha-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; border-bottom: 2px solid var(--ink); padding-bottom: 1.25rem; margin-bottom: 2rem; }
+  .ficha-head h2 { font-family: var(--display); font-size: clamp(1.6rem, 3.5vw, 2.4rem); line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+  .ficha-head p { margin: .35rem 0 0; color: var(--muted); max-width: 34rem; }
+  .ficha-head .who { text-align: right; font-size: .95rem; color: var(--muted); }
+  .ficha-head .who b { color: var(--ink); display: block; font-size: 1.05rem; }
+
+  fieldset { border: 0; padding: 0; margin: 0 0 2.75rem; min-width: 0; }
+  legend { font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: -0.01em; padding: 0; margin-bottom: .35rem; }
+  .hint { color: var(--muted); margin: 0 0 1.25rem; font-size: .975rem; max-width: 46rem; }
+  .grid { display: grid; gap: 1rem 1.25rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+  label.field { display: grid; gap: .35rem; font-weight: 700; font-size: .95rem; }
+  label.field span.opt { font-weight: 400; color: var(--muted); }
+  input[type=text], input[type=tel], input[type=number], select, textarea {
+    font: 400 1rem var(--body); color: var(--ink); background: var(--paper); border: 1.5px solid var(--line); border-radius: 10px; padding: .75rem .85rem; width: 100%;
+  }
+  textarea { min-height: 8rem; resize: vertical; line-height: 1.5; }
+  input:focus, select:focus, textarea:focus { border-color: var(--pick); outline: none; box-shadow: 0 0 0 3px var(--pick-soft); }
+
+  /* Mapa dos dentes */
+  .mapa { overflow-x: auto; padding-bottom: .5rem; }
+  .mapa-inner { min-width: 40rem; }
+  .lados { display: flex; justify-content: space-between; color: var(--muted); font-size: .875rem; margin-bottom: .5rem; }
+  .arcada { display: flex; justify-content: center; gap: 4px; }
+  .arcada + .arcada { margin-top: 10px; }
+  .arcada .meio { width: 14px; }
+  .dente { --w: 2.3rem; width: var(--w); height: 3.6rem; border: 1.5px solid var(--line); background: var(--paper); color: var(--muted); font: 700 .8rem var(--body); cursor: pointer; display: grid; place-items: center; padding: 0; transition: background .15s, color .15s, border-color .15s; }
+  .sup .dente { border-radius: 10px 10px 16px 16px; align-items: end; padding-bottom: .4rem; }
+  .inf .dente { border-radius: 16px 16px 10px 10px; align-items: start; padding-top: .4rem; }
+  .dente.m { --w: 3rem; } .dente.p { --w: 2.4rem; } .dente.c { --w: 2.2rem; } .dente.i { --w: 2rem; }
+  .dente:hover { border-color: var(--pick); color: var(--ink); }
+  .dente[aria-pressed="true"] { background: var(--pick); border-color: var(--pick); color: #fff; }
+  .arcada-label { text-align: center; color: var(--muted); font-size: .85rem; margin: .4rem 0; }
+  .mapa-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; margin-top: 1rem; font-size: .95rem; }
+  .linkbtn { background: none; border: 0; color: var(--pick); font: 700 .95rem var(--body); cursor: pointer; padding: 0; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* Chips */
+  .chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .chip { position: relative; }
+  .chip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .chip span { display: inline-block; padding: .55rem .95rem; border: 1.5px solid var(--line); border-radius: 999px; font-size: .95rem; background: var(--paper); }
+  .chip input:checked + span { background: var(--pick-soft); border-color: var(--pick); color: var(--ink); font-weight: 700; }
+  .chip input:focus-visible + span { outline: 3px solid var(--pick); outline-offset: 2px; }
+  .sub { font-weight: 700; font-size: .95rem; margin: 1.5rem 0 .6rem; }
+
+  .intensidade { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 1rem; max-width: 30rem; }
+  input[type=range] { width: 100%; accent-color: var(--pick); }
+  output { font-family: var(--display); font-weight: 700; font-size: 1.6rem; min-width: 3ch; text-align: right; }
+  .escala { display: flex; justify-content: space-between; max-width: 26rem; color: var(--muted); font-size: .85rem; }
+
+  .ia { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: .75rem; }
+  .ia-note { color: var(--muted); font-size: .9rem; }
+  .ia-result { margin-top: 1rem; border-left: 3px solid var(--pick); padding: .25rem 0 .25rem 1rem; display: none; }
+  .ia-result.on { display: block; }
+
+  .consent { display: flex; gap: .75rem; align-items: flex-start; max-width: 46rem; }
+  .consent input { width: 1.25rem; height: 1.25rem; margin-top: .2rem; accent-color: var(--pick); flex: none; }
+  .erros { color: var(--warn); font-weight: 700; margin: 0 0 1rem; }
+  .erros:empty { display: none; }
+  .acoes { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+
+  /* Resumo */
+  .resumo { display: none; margin-top: 2.5rem; border: 2px solid var(--ink); border-radius: 16px; padding: clamp(1.25rem, 3vw, 2rem); }
+  .resumo.on { display: block; }
+  .resumo h3 { font-family: var(--display); font-size: 1.5rem; margin: 0 0 .25rem; letter-spacing: -0.01em; }
+  .resumo dl { display: grid; grid-template-columns: minmax(9rem, 14rem) 1fr; gap: .6rem 1.25rem; margin: 1.25rem 0; }
+  .resumo dt { color: var(--muted); }
+  .resumo dd { margin: 0; font-weight: 700; }
+  @media (max-width: 560px) { .resumo dl { grid-template-columns: 1fr; gap: .1rem; } .resumo dd { margin-bottom: .6rem; } }
+  .aviso { color: var(--muted); font-size: .925rem; margin: 0 0 1.25rem; }
+
+  /* Clínica */
+  .clinica { padding-block: 10vh 6vh; }
+  .clinica .cols { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+  .clinica h3 { font-family: var(--display); font-size: 1.2rem; margin: 0 0 .5rem; }
+  .clinica p { margin: 0; color: var(--muted); }
+  footer { padding-block: 2.5rem; color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+
+  @media (max-width: 640px) { header nav a:not(:last-child) { display: none; } .ficha-head .who { text-align: left; } }
+</style>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+
+<header>
+  <div class="wrap">
+    <a class="brand" href="#topo">Budag Odontologia<small>Dra. Rafaela Budag, cirurgiã-dentista</small></a>
+    <nav aria-label="Principal">
+      <a href="#como">Como funciona</a>
+      <a href="#clinica">A clínica</a>
+      <a href="#ficha">Descrever meu caso</a>
+    </nav>
+  </div>
+</header>
+
+<main id="topo">
+  <section class="hero wrap">
+    <h1>Conte onde dói antes de sentar na cadeira.</h1>
+    <p>Marque os dentes no mapa, descreva o que você sente e envie para a clínica. A Dra. Rafaela chega à sua consulta já sabendo por onde começar e se uma radiografia panorâmica vai ajudar.</p>
+    <div><a class="btn" href="#ficha">Descrever meu caso</a></div>
+  </section>
+
+  <section class="steps wrap" id="como">
+    <h2>Três passos, uns cinco minutos.</h2>
+    <ol>
+      <li><strong>Marque a região</strong><span>Toque nos dentes que incomodam ou escolha uma região, como sisos ou articulação da mandíbula.</span></li>
+      <li><strong>Descreva o que sente</strong><span>Tipo de dor, desde quando e o que piora. Do seu jeito, sem precisar de termo técnico.</span></li>
+      <li><strong>Envie para a clínica</strong><span>Você revisa a ficha pronta e manda pelo WhatsApp ou e-mail. A equipe responde para agendar.</span></li>
+    </ol>
+  </section>
+
+  <section class="ficha-section wrap" id="ficha">
+    <form class="ficha" id="form" novalidate>
+      <div class="ficha-head">
+        <div>
+          <h2>Ficha de pré-avaliação</h2>
+          <p>Baseada nos campos de uma requisição de radiografia panorâmica. Quanto mais detalhe, melhor a primeira consulta.</p>
+        </div>
+        <div class="who"><b>Dra. Rafaela Budag</b>Cirurgiã-dentista<br>CRO 00000 (exemplo)</div>
+      </div>
+
+      <fieldset>
+        <legend>Seus dados</legend>
+        <p class="hint">Só o necessário para a clínica falar com você.</p>
+        <div class="grid">
+          <label class="field">Nome completo<input type="text" id="nome" autocomplete="name" required></label>
+          <label class="field">WhatsApp ou telefone<input type="tel" id="tel" autocomplete="tel" inputmode="tel" placeholder="(00) 00000-0000" required></label>
+          <label class="field">Idade <span class="opt">(opcional)</span><input type="number" id="idade" min="1" max="120" inputmode="numeric"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Motivo da consulta</legend>
+        <div class="chips" id="motivo" role="group" aria-label="Motivo da consulta">
+          <label class="chip"><input type="radio" name="motivo" value="Avaliação de dor ou incômodo" checked><span>Dor ou incômodo</span></label>
+          <label class="chip"><input type="radio" name="motivo" value="Avaliação dos sisos"><span>Sisos</span></label>
+          <label class="chip"><input type="radio" name="motivo" value="Planejamento de implante"><span>Implante</span></label>
+          <label class="chip"><input type="radio" name="motivo" value="Avaliação para aparelho"><span>Aparelho</span></label>
+          <label class="chip"><input type="radio" name="motivo" value="Check-up geral"><span>Check-up</span></label>
+          <label class="chip"><input type="radio" name="motivo" value="Outro"><span>Outro</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Onde é</legend>
+        <p class="hint">O mapa está como se você estivesse de frente para um espelho virado: o lado esquerdo da tela é o seu lado direito, como na radiografia panorâmica. Toque em quantos dentes quiser.</p>
+        <div class="mapa">
+          <div class="mapa-inner">
+            <div class="lados" aria-hidden="true"><span>Seu lado direito</span><span>Seu lado esquerdo</span></div>
+            <div class="arcada-label">Dentes de cima</div>
+            <div class="arcada sup" id="sup"></div>
+            <div class="arcada inf" id="inf"></div>
+            <div class="arcada-label">Dentes de baixo</div>
+          </div>
+        </div>
+        <div class="mapa-foot">
+          <span id="selecionados" aria-live="polite">Nenhum dente marcado.</span>
+          <button type="button" class="linkbtn" id="limpar">Desmarcar todos</button>
+        </div>
+        <p class="sub">Ou marque uma região</p>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="regiao" value="Boca toda"><span>Boca toda</span></label>
+          <label class="chip"><input type="checkbox" name="regiao" value="Sisos"><span>Sisos</span></label>
+          <label class="chip"><input type="checkbox" name="regiao" value="Articulação da mandíbula (ATM)"><span>Articulação da mandíbula</span></label>
+          <label class="chip"><input type="checkbox" name="regiao" value="Região acima dos dentes de cima (seios maxilares)"><span>Acima dos dentes de cima</span></label>
+          <label class="chip"><input type="checkbox" name="regiao" value="Não sei dizer"><span>Não sei dizer</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>O que você sente</legend>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="sintoma" value="Dor"><span>Dor</span></label>
+          <label class="chip"><input type="checkbox" name="sintoma" value="Sensibilidade"><span>Sensibilidade</span></label>
+          <label class="chip"><input type="checkbox" name="sintoma" value="Inchaço"><span>Inchaço</span></label>
+          <label class="chip"><input type="checkbox" name="sintoma" value="Sangramento na gengiva"><span>Gengiva sangrando</span></label>
+          <label class="chip"><input type="checkbox" name="sintoma" value="Dente quebrado ou trincado"><span>Dente quebrado ou trincado</span></label>
+          <label class="chip"><input type="checkbox" name="sintoma" value="Dente mole"><span>Dente mole</span></label>
+          <label class="chip"><input type="checkbox" name="sintoma" value="Siso nascendo"><span>Siso nascendo</span></label>
+          <label class="chip"><input type="checkbox" name="sintoma" value="Estalo ou travamento da mandíbula"><span>Estalo ou trava na mandíbula</span></label>
+          <label class="chip"><input type="checkbox" name="sintoma" value="Dificuldade para abrir a boca"><span>Dificuldade para abrir a boca</span></label>
+        </div>
+
+        <p class="sub">O que piora</p>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="gatilho" value="Frio"><span>Frio</span></label>
+          <label class="chip"><input type="checkbox" name="gatilho" value="Calor"><span>Calor</span></label>
+          <label class="chip"><input type="checkbox" name="gatilho" value="Doce"><span>Doce</span></label>
+          <label class="chip"><input type="checkbox" name="gatilho" value="Ao mastigar"><span>Ao mastigar</span></label>
+          <label class="chip"><input type="checkbox" name="gatilho" value="Dói sem motivo"><span>Dói sem motivo</span></label>
+          <label class="chip"><input type="checkbox" name="gatilho" value="Piora à noite"><span>Piora à noite</span></label>
+        </div>
+
+        <div class="grid" style="margin-top:1.5rem">
+          <label class="field">Desde quando
+            <select id="desde">
+              <option value="">Escolha</option>
+              <option>Começou hoje</option>
+              <option>Há alguns dias</option>
+              <option>Entre 1 e 4 semanas</option>
+              <option>Há mais de um mês</option>
+              <option>Vai e volta há muito tempo</option>
+            </select>
+          </label>
+          <div>
+            <label class="field" for="intensidade">Intensidade do incômodo</label>
+            <div class="intensidade">
+              <input type="range" id="intensidade" min="0" max="10" value="0" aria-describedby="escala">
+              <output id="intOut" for="intensidade">0</output>
+            </div>
+            <div class="escala" id="escala"><span>0, nada</span><span>10, insuportável</span></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Exames e tratamentos</legend>
+        <div class="grid">
+          <label class="field">Você já tem radiografia panorâmica?
+            <select id="exame">
+              <option>Não tenho</option>
+              <option>Tenho, feita nos últimos 6 meses</option>
+              <option>Tenho, mas é mais antiga</option>
+              <option>Não sei</option>
+            </select>
+          </label>
+        </div>
+        <p class="sub">Você tem na boca</p>
+        <div class="chips">
+          <label class="chip"><input type="checkbox" name="tem" value="Aparelho ortodôntico"><span>Aparelho</span></label>
+          <label class="chip"><input type="checkbox" name="tem" value="Implante"><span>Implante</span></label>
+          <label class="chip"><input type="checkbox" name="tem" value="Prótese ou ponte"><span>Prótese ou ponte</span></label>
+          <label class="chip"><input type="checkbox" name="tem" value="Canal tratado"><span>Canal tratado</span></label>
+          <label class="chip"><input type="checkbox" name="tem" value="Coroa ou faceta"><span>Coroa ou faceta</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Conte com suas palavras</legend>
+        <p class="hint">Por exemplo: “Dente do fundo, em baixo do lado esquerdo, dói quando mastigo e com gelado. Começou semana passada.”</p>
+        <label class="field" for="relato" style="position:absolute;left:-9999px">Relato</label>
+        <textarea id="relato" maxlength="1500"></textarea>
+        <div class="ia" id="iaBox" hidden>
+          <button type="button" class="btn ghost" id="iaBtn">Organizar meu relato</button>
+          <span class="ia-note">Preenche as opções acima a partir do que você escreveu. Não faz diagnóstico.</span>
+        </div>
+        <div class="ia-result" id="iaResult" aria-live="polite"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Autorização</legend>
+        <label class="consent"><input type="checkbox" id="consent"><span>Autorizo a Budag Odontologia a usar estas informações apenas para avaliar meu caso e entrar em contato comigo. Nada é enviado até eu escolher como enviar.</span></label>
+      </fieldset>
+
+      <p class="erros" id="erros" role="alert"></p>
+      <div class="acoes">
+        <button type="submit" class="btn">Revisar minha ficha</button>
+        <span class="ia-note">Você confere tudo antes de enviar.</span>
+      </div>
+
+      <div class="resumo" id="resumo" tabindex="-1">
+        <h3>Sua ficha de pré-avaliação</h3>
+        <p class="aviso">Esta ficha ajuda a preparar a consulta. Quem decide se o exame é necessário é a dentista, na avaliação.</p>
+        <dl id="resumoLista"></dl>
+        <div class="acoes">
+          <a class="btn" id="enviarWpp" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp</a>
+          <a class="btn ghost" id="enviarEmail" href="#">Enviar por e-mail</a>
+          <button type="button" class="btn ghost" id="copiar">Copiar texto</button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <section class="clinica wrap" id="clinica">
+    <h2 class="section-title">A clínica</h2>
+    <div class="cols">
+      <div><h3>Atendimento</h3><p>Clínica geral, sisos, implantes e avaliação ortodôntica com a Dra. Rafaela Budag.</p></div>
+      <div><h3>Endereço</h3><p>Rua Exemplo, 123, sala 4<br>Centro, Cidade (SC)</p></div>
+      <div><h3>Horários</h3><p>Segunda a sexta, das 8h às 18h<br>Sábados, das 8h às 12h</p></div>
+      <div><h3>Contato</h3><p>(00) 00000-0000<br>contato@exemplo.com.br</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Budag Odontologia. Responsável técnica: Dra. Rafaela Budag, CRO 00000 (exemplo).</span>
+    <span>Esta página não substitui a avaliação clínica.</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ========== Cena: poeira que vira a radiografia panorâmica e depois a arcada em 3D ========== */
+(function () {
+  if (!window.THREE) return;
+  const canvas = document.getElementById('scene');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mobile = innerWidth < 768;
+  const N = mobile ? 12000 : 32000;
+
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true }); } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, .1, 100);
+  camera.position.set(0, 0, 9);
+
+  // Larguras aproximadas (mm), do meio para o fundo: incisivo central até 3º molar
+  const UP = [8.5, 6.5, 7.5, 7, 6.5, 10, 9, 8.5];
+  const LO = [5.3, 5.8, 6.8, 7, 7, 11, 10.5, 10];
+  const HALF = 3.9;
+  function teethLayout(widths) {
+    const total = widths.reduce((a, b) => a + b, 0), k = HALF / total, out = [];
+    let acc = 0;
+    widths.forEach((w, i) => { const c = (acc + w / 2) * k; acc += w; out.push({ x: c, w: w * k * .82, molar: i >= 5, i }); });
+    return out;
+  }
+  const upT = teethLayout(UP), loT = teethLayout(LO);
+  const teeth = [];
+  [-1, 1].forEach(side => {
+    upT.forEach(t => teeth.push({ x: t.x * side, w: t.w, molar: t.molar, i: t.i, jaw: 1 }));
+    loT.forEach(t => teeth.push({ x: t.x * side, w: t.w, molar: t.molar, i: t.i, jaw: -1 }));
+  });
+
+  const A = new Float32Array(N * 3), B = new Float32Array(N * 3), D = new Float32Array(N * 3), R = new Float32Array(N);
+  const smile = x => x * x * .035;
+  for (let n = 0; n < N; n++) {
+    let x, y, z = (Math.random() - .5) * .25;
+    if (Math.random() < .82) {
+      const t = teeth[(Math.random() * teeth.length) | 0];
+      const crownH = .55 + (t.i < 3 ? .1 : 0), rootH = t.molar ? .75 : 1.05 + (t.i === 2 ? .25 : 0);
+      if (Math.random() < .5) { // coroa
+        let u, v; do { u = Math.random() * 2 - 1; v = Math.random() * 2 - 1; } while (u * u + v * v > 1);
+        x = t.x + u * t.w / 2; y = .08 + (v * .5 + .5) * crownH;
+      } else { // raiz
+        const s = Math.random(), taper = 1 - s * .85;
+        const off = t.molar ? (Math.random() < .5 ? -1 : 1) * t.w * .22 : 0;
+        x = t.x + off + (Math.random() - .5) * t.w * (t.molar ? .28 : .42) * taper; y = .08 + crownH + s * rootH;
+      }
+      y = t.jaw * y + smile(x);
+    } else { // osso e névoa, como no filme da radiografia
+      x = (Math.random() * 2 - 1) * (HALF + .6); y = (Math.random() * 2 - 1) * 2.1 + smile(x); z = (Math.random() - .5) * .6;
+    }
+    A[n*3] = x; A[n*3+1] = y; A[n*3+2] = z;
+    // Arcada em U, vista em 3D
+    const th = (x / (HALF + .6)) * Math.PI * .5, Rr = 3;
+    B[n*3] = Math.sin(th) * Rr; B[n*3+1] = y - smile(x); B[n*3+2] = Math.cos(th) * Rr * 1.15 - Rr * .6 + z;
+    // Poeira inicial
+    D[n*3] = (Math.random() - .5) * 18; D[n*3+1] = (Math.random() - .5) * 11; D[n*3+2] = (Math.random() - .5) * 8;
+    R[n] = Math.random();
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(D, 3));
+  geo.setAttribute('aPano', new THREE.BufferAttribute(A, 3));
+  geo.setAttribute('aArch', new THREE.BufferAttribute(B, 3));
+  geo.setAttribute('aRandom', new THREE.BufferAttribute(R, 1));
+
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const dark = () => matchMedia('(prefers-color-scheme: dark)').matches && document.documentElement.dataset.theme !== 'light' || document.documentElement.dataset.theme === 'dark';
+  const mat = new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false,
+    uniforms: { uTime: { value: 0 }, uIntro: { value: reduce ? 1 : 0 }, uMorph: { value: 0 }, uFade: { value: 1 }, uSize: { value: mobile ? 34 : 46 }, uColor: { value: new THREE.Color(css('--particle')) } },
+    vertexShader: `
+      uniform float uTime, uIntro, uMorph, uSize;
+      attribute vec3 aPano, aArch; attribute float aRandom; varying float vA;
+      void main() {
+        float ti = clamp(uIntro * 1.6 - aRandom * .6, 0., 1.); ti = ti*ti*(3.-2.*ti);
+        float tm = clamp(uMorph * 1.3 - aRandom * .3, 0., 1.); tm = tm*tm*(3.-2.*tm);
+        vec3 p = mix(position, mix(aPano, aArch, tm), ti);
+        p += .025 * vec3(sin(uTime * .7 + aRandom * 30.), cos(uTime * .6 + aRandom * 20.), 0.);
+        vec4 mv = modelViewMatrix * vec4(p, 1.);
+        gl_PointSize = uSize * (1. / -mv.z) * (.45 + aRandom * .8);
+        gl_Position = projectionMatrix * mv;
+        vA = .25 + aRandom * .75;
+      }`,
+    fragmentShader: `
+      uniform vec3 uColor; uniform float uFade; varying float vA;
+      void main() {
+        float d = length(gl_PointCoord - .5); if (d > .5) discard;
+        gl_FragColor = vec4(uColor, smoothstep(.5, 0., d) * vA * uFade);
+      }`
+  });
+  function applyTheme() { mat.uniforms.uColor.value.set(css('--particle')); mat.blending = dark() ? THREE.AdditiveBlending : THREE.NormalBlending; mat.needsUpdate = true; }
+  applyTheme();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme);
+
+  const group = new THREE.Group(); group.add(new THREE.Points(geo, mat)); scene.add(group);
+
+  function resize() {
+    renderer.setSize(innerWidth, innerHeight, false);
+    camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+    const narrow = innerWidth < 768;
+    group.scale.setScalar(narrow ? .55 : 1);
+    group.userData.base = narrow ? { x: 0, y: 1.6 } : { x: 1.4, y: .9 };
+  }
+  addEventListener('resize', resize); resize();
+
+  const hero = document.querySelector('.hero'), ficha = document.getElementById('ficha');
+  let tMorph = 0, tFade = 1, cMorph = 0, cFade = 1;
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  function readScroll() {
+    tMorph = clamp01(scrollY / (hero.offsetHeight * 1.1));
+    const top = ficha.getBoundingClientRect().top;
+    tFade = 1 - .85 * clamp01(1 - top / innerHeight);
+  }
+  addEventListener('scroll', readScroll, { passive: true }); readScroll();
+
+  const start = performance.now();
+  function loop(now) {
+    requestAnimationFrame(loop);
+    if (document.hidden) return;
+    const time = (now - start) / 1000;
+    if (!reduce) mat.uniforms.uIntro.value = Math.min(1, time / 2.8);
+    const k = reduce ? 1 : .08;
+    cMorph += (tMorph - cMorph) * k; cFade += (tFade - cFade) * k;
+    mat.uniforms.uMorph.value = cMorph; mat.uniforms.uFade.value = cFade;
+    mat.uniforms.uTime.value = reduce ? 0 : time;
+    const b = group.userData.base;
+    group.position.set(b.x * (1 - cMorph * .6), b.y - cMorph * .4, 0);
+    group.rotation.x = cMorph * .55;
+    group.rotation.y = cMorph * Math.PI * .35 + (reduce ? 0 : Math.sin(time * .2) * .08 * cMorph);
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(loop);
+})();
+
+/* ========== Mapa dos dentes (numeração FDI) ========== */
+const tipo = n => { const d = n % 10; return d >= 6 ? 'm' : d >= 4 ? 'p' : d === 3 ? 'c' : 'i'; };
+const nomeDente = n => {
+  const q = Math.floor(n / 10), d = n % 10;
+  const nomes = { 1: 'incisivo central', 2: 'incisivo lateral', 3: 'canino', 4: '1º pré-molar', 5: '2º pré-molar', 6: '1º molar', 7: '2º molar', 8: '3º molar (siso)' };
+  const lado = (q === 1 || q === 4) ? 'direito' : 'esquerdo', arc = q <= 2 ? 'de cima' : 'de baixo';
+  return nomes[d] + ' ' + arc + ' ' + lado;
+};
+const marcados = new Set();
+function montarArcada(el, seq) {
+  seq.forEach((n, idx) => {
+    if (n === 0) { const s = document.createElement('span'); s.className = 'meio'; el.appendChild(s); return; }
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'dente ' + tipo(n); b.textContent = n;
+    b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', 'Dente ' + n + ', ' + nomeDente(n));
+    const pos = Math.abs(idx - 8) ; b.style.transform = 'translateY(' + (el.id === 'sup' ? -1 : 1) * Math.round(Math.pow(pos / 8, 2) * 14) + 'px)';
+    b.onclick = () => { const on = !marcados.has(n); on ? marcados.add(n) : marcados.delete(n); b.setAttribute('aria-pressed', on); atualizarSel(); };
+    el.appendChild(b);
+  });
+}
+montarArcada(document.getElementById('sup'), [18,17,16,15,14,13,12,11,0,21,22,23,24,25,26,27,28]);
+montarArcada(document.getElementById('inf'), [48,47,46,45,44,43,42,41,0,31,32,33,34,35,36,37,38]);
+function atualizarSel() {
+  const el = document.getElementById('selecionados');
+  el.textContent = marcados.size ? 'Marcados: ' + [...marcados].sort((a, b) => a - b).join(', ') + '.' : 'Nenhum dente marcado.';
+}
+document.getElementById('limpar').onclick = () => { marcados.clear(); document.querySelectorAll('.dente').forEach(b => b.setAttribute('aria-pressed', 'false')); atualizarSel(); };
+
+const intensidade = document.getElementById('intensidade'), intOut = document.getElementById('intOut');
+intensidade.oninput = () => intOut.textContent = intensidade.value;
+
+/* ========== Resumo e envio ========== */
+const val = id => document.getElementById(id).value.trim();
+const lista = name => [...document.querySelectorAll('input[name="' + name + '"]:checked')].map(i => i.value);
+let textoFicha = '';
+const WHATSAPP = '5500000000000';          // número da clínica (trocar)
+const EMAIL = 'contato@exemplo.com.br';    // e-mail da clínica (trocar)
+
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const erros = [];
+  if (!val('nome')) erros.push('Preencha seu nome.');
+  if (val('tel').replace(/\D/g, '').length < 10) erros.push('Informe um telefone com DDD.');
+  if (!marcados.size && !lista('regiao').length && !lista('sintoma').length && !val('relato')) erros.push('Marque um dente, uma região, um sintoma ou escreva seu relato.');
+  if (!document.getElementById('consent').checked) erros.push('Marque a autorização para continuar.');
+  document.getElementById('erros').textContent = erros.join(' ');
+  if (erros.length) return;
+
+  const dentes = [...marcados].sort((a, b) => a - b);
+  const linhas = [
+    ['Nome', val('nome')],
+    ['Contato', val('tel')],
+    ['Idade', val('idade') ? val('idade') + ' anos' : ''],
+    ['Motivo', (document.querySelector('input[name="motivo"]:checked') || {}).value],
+    ['Dentes', dentes.length ? dentes.map(n => n + ' (' + nomeDente(n) + ')').join('; ') : ''],
+    ['Regiões', lista('regiao').join(', ')],
+    ['Sintomas', lista('sintoma').join(', ')],
+    ['Piora com', lista('gatilho').join(', ')],
+    ['Desde', val('desde')],
+    ['Intensidade', intensidade.value + ' de 10'],
+    ['Panorâmica', val('exame')],
+    ['Tem na boca', lista('tem').join(', ')],
+    ['Relato', val('relato')]
+  ].filter(l => l[1]);
+
+  const dl = document.getElementById('resumoLista'); dl.textContent = '';
+  linhas.forEach(([k, v]) => { const dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = k; dd.textContent = v; dl.append(dt, dd); });
+  textoFicha = 'Pré-avaliação, Budag Odontologia\n\n' + linhas.map(([k, v]) => k + ': ' + v).join('\n');
+  document.getElementById('enviarWpp').href = 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(textoFicha);
+  document.getElementById('enviarEmail').href = 'mailto:' + EMAIL + '?subject=' + encodeURIComponent('Pré-avaliação: ' + val('nome')) + '&body=' + encodeURIComponent(textoFicha);
+  const r = document.getElementById('resumo'); r.classList.add('on'); r.focus({ preventScroll: true });
+  r.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+});
+
+document.getElementById('copiar').onclick = async function () {
+  try { await navigator.clipboard.writeText(textoFicha); this.textContent = 'Texto copiado'; }
+  catch (e) { this.textContent = 'Selecione o texto da ficha para copiar'; }
+  setTimeout(() => this.textContent = 'Copiar texto', 2500);
+};
+
+/* ========== Organizar o relato com IA (só aparece onde estiver disponível) ========== */
+(async function () {
+  if (!window.claude || !claude.use) return;
+  const sample = await claude.use('sample');
+  if (!sample) return;
+  const box = document.getElementById('iaBox'), btn = document.getElementById('iaBtn'), out = document.getElementById('iaResult');
+  box.hidden = false;
+  const opts = name => [...document.querySelectorAll('input[name="' + name + '"]')].map(i => i.value);
+  const desdeOpts = [...document.querySelectorAll('#desde option')].map(o => o.value).filter(Boolean);
+  btn.onclick = async () => {
+    const relato = val('relato');
+    if (relato.length < 10) { out.className = 'ia-result on'; out.textContent = 'Escreva pelo menos uma frase sobre o que você sente para organizar.'; return; }
+    btn.disabled = true; btn.textContent = 'Organizando...';
+    const prompt = 'Você ajuda um paciente a preencher uma ficha de pré-avaliação odontológica. NÃO faça diagnóstico, NÃO sugira tratamento nem medicamento. ' +
+      'Leia o relato e responda SOMENTE com JSON neste formato: {"sintomas":[], "gatilhos":[], "desde":"", "regiao":"", "resumo":""}. ' +
+      'sintomas: apenas valores desta lista: ' + JSON.stringify(opts('sintoma')) + '. gatilhos: apenas desta lista: ' + JSON.stringify(opts('gatilho')) + '. ' +
+      'desde: um valor desta lista ou "": ' + JSON.stringify(desdeOpts) + '. ' +
+      'regiao: descrição curta da região citada pelo paciente em português simples (ex.: "dentes de baixo, lado esquerdo, no fundo"), ou "" se não citou. ' +
+      'resumo: o relato reescrito em uma ou duas frases claras, em português do Brasil, sem acrescentar nada que o paciente não disse. ' +
+      'Se o relato não for sobre dentes ou boca, devolva listas vazias e resumo "". Relato: """' + relato.slice(0, 1500) + '"""';
+    try {
+      const d = await sample.json(prompt, { modelTier: 'quick' });
+      const marcar = (name, vals) => document.querySelectorAll('input[name="' + name + '"]').forEach(i => { if ((vals || []).includes(i.value)) i.checked = true; });
+      marcar('sintoma', d.sintomas); marcar('gatilho', d.gatilhos);
+      if (d.desde && desdeOpts.includes(d.desde)) document.getElementById('desde').value = d.desde;
+      out.className = 'ia-result on'; out.textContent = '';
+      const p1 = document.createElement('p'); p1.style.margin = '0 0 .4rem';
+      p1.textContent = d.resumo ? 'Resumo: ' + d.resumo : 'Não consegui identificar sintomas no relato. Use as opções acima.';
+      out.appendChild(p1);
+      if (d.regiao) { const p2 = document.createElement('p'); p2.style.margin = '0'; p2.textContent = 'Região que você citou: ' + d.regiao + '. Marque os dentes no mapa para confirmar.'; out.appendChild(p2); }
+    } catch (e) {
+      out.className = 'ia-result on';
+      out.textContent = e && e.code === 'rate_limited' ? 'Muitas tentativas seguidas. Espere um minuto e tente de novo.' : 'Não foi possível organizar agora. Preencha as opções acima normalmente.';
+    }
+    btn.disabled = false; btn.textContent = 'Organizar meu relato';
+  };
+})();
+</script>
+</body>
+</html>
